@@ -13,8 +13,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Build project
         run: |
-          date +%H%M%S > /tmp/rba1234
-          zip --junk-paths my-artifact-$(cat /tmp/rba1234) README.md
+          zip --junk-paths my-artifact- README.md
           ls -l /tmp
       - name: Create Release
         id: create_release_2
@@ -33,6 +32,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release_2.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ./my-artifact-$(cat /tmp/rba1234).zip
-          asset_name: my-artifact-$(cat /tmp/rba1234).zip
+          asset_path: ./my-artifact-.zip
+          asset_name: my-artifact-.zip
           asset_content_type: application/zip

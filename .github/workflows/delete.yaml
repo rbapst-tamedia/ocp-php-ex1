@@ -10,4 +10,4 @@ jobs:
     steps:
     - name: Print info
       run: |
-        echo ${{ github.event }}
+        echo I was called... ${{github.event.ref}}

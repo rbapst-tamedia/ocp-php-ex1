@@ -1,6 +1,6 @@
 name: TestDelete
 on:
-  delete:
+  push:
     branches:
     - 'test-rba-*'
 jobs:
@@ -15,6 +15,14 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
         aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
+    # - name: Terraform init
+    #   uses: hashicorp/terraform-github-action@master
+    #   with:
+    #     tf_actions_version: 0.12.13
+    #     tf_actions_subcommand: 'init'
+    - name: Print info
+      env:
+        AWS_ACCOUT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
       run: |
         echo I was called because ${{github.event.ref_type}} ${{github.event.ref}} was deleted...
         echo aws s3 ls rba-tf-state-$AWS_ACCOUNT_ID

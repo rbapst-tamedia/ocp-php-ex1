@@ -8,6 +8,26 @@ jobs:
     name: My First Job on Delete
     runs-on: ubuntu-18.04
     steps:
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+        aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
+    # - name: Terraform init
+    #   uses: hashicorp/terraform-github-action@master
+    #   with:
+    #     tf_actions_version: 0.12.13
+    #     tf_actions_subcommand: 'init'
     - name: Print info
       run: |
-        echo I was called... ${{github.event.ref}}
+        echo I was called because ${{github.event.ref_type}} ${{github.event.ref}} was deleted...
+        aws s3 ls rba-tf-state-$AWS_ACCOUNTID
+
+---
+parameters:
+  AWS_ACCESS_KEY_ID
+  AWS_SECRET_ACCESS_KEY
+  AWS_ACCOUNT_ID
+  AWS_DEFAULT_REGION

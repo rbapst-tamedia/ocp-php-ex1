@@ -23,4 +23,5 @@ jobs:
     - name: Print info
       run: |
         echo I was called because ${{github.event.ref_type}} ${{github.event.ref}} was deleted...
-        aws s3 ls rba-tf-state-$AWS_ACCOUNTID
+        echo aws s3 ls rba-tf-state-$AWS_ACCOUNT_ID
+        aws s3 ls rba-tf-state-$AWS_ACCOUNT_ID

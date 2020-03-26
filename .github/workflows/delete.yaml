@@ -11,3 +11,4 @@ jobs:
     - name: Print info
       run: |
         echo I was called... ${{github.event.ref}}
+        echo and my secret is ${{secrets.DEV_AWS_CLIENT_ID}}

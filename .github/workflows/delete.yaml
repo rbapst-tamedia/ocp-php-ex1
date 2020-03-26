@@ -24,10 +24,3 @@ jobs:
       run: |
         echo I was called because ${{github.event.ref_type}} ${{github.event.ref}} was deleted...
         aws s3 ls rba-tf-state-$AWS_ACCOUNTID
-
----
-parameters:
-  AWS_ACCESS_KEY_ID
-  AWS_SECRET_ACCESS_KEY
-  AWS_ACCOUNT_ID
-  AWS_DEFAULT_REGION

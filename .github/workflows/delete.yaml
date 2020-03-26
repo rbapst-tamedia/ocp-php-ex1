@@ -1,0 +1,13 @@
+name: TestDelete
+on:
+  delete:
+    branches:
+    - 'test-rba-*'
+jobs:
+  my_first_job:
+    name: My First Job on Delete
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Print info
+      run: |
+        echo I was called... ${{github.event.ref}}

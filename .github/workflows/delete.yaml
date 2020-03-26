@@ -1,6 +1,6 @@
 name: TestDelete
 on:
-  delete:
+  push:
     branches:
     - 'test-rba-*'
 jobs:
@@ -21,6 +21,8 @@ jobs:
     #     tf_actions_version: 0.12.13
     #     tf_actions_subcommand: 'init'
     - name: Print info
+      env:
+        AWS_ACCOUT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
       run: |
         echo I was called because ${{github.event.ref_type}} ${{github.event.ref}} was deleted...
         echo aws s3 ls rba-tf-state-$AWS_ACCOUNT_ID

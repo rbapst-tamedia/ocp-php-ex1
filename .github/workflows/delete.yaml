@@ -1,6 +1,6 @@
 name: TestDelete
 on:
-  push:
+  delete:
     branches:
     - 'test-rba-*'
 jobs:
@@ -9,21 +9,29 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
     - name: Configure AWS Credentials
+      id: aws-config
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
-        aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
-    # - name: Terraform init
-    #   uses: hashicorp/terraform-github-action@master
-    #   with:
-    #     tf_actions_version: 0.12.13
-    #     tf_actions_subcommand: 'init'
+    - name: 'Checkout default branch (to have tf files)'
+      uses: actions/checkout@v2
+      with:
+        ref: master
+    - name: Terraform init
+      uses: hashicorp/terraform-github-actions@master
+      with:
+        tf_actions_version: 0.12.20
+        tf_actions_subcommand: 'init'
+        args: -input=false -backend-config=bucket=rba-tf-state-${{ steps.aws-config.outputs.aws-account-id }}
     - name: Print info
       env:
-        AWS_ACCOUT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+        S3_BUCKET: rba-tf-state-${{ steps.aws-config.outputs.aws-account-id }}
+        S3_KEY: "env:/${{github.event.ref}}/disco"
       run: |
-        echo I was called because ${{github.event.ref_type}} ${{github.event.ref}} was deleted...
-        echo aws s3 ls rba-tf-state-$AWS_ACCOUNT_ID
-        aws s3 ls rba-tf-state-$AWS_ACCOUNT_ID
+        echo I was called because ${{github.event.ref_type}} ${{github.event.ref}} was ${{github.action}}...
+        echo aws s3 ls $S3_BUCKET
+        aws s3 ls $S3_BUCKET
+        terraform workspace list
+        ls -lr

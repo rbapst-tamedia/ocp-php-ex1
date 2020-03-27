@@ -1,6 +1,6 @@
 name: TestDelete
 on:
-  push:
+  delete:
     branches:
     - 'test-rba-*'
 jobs:
@@ -16,7 +16,9 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
     - name: 'Checkout default branch (to have tf files)'
-      uses: actions/checkout@master
+      uses: actions/checkout@v2
+      with:
+        ref: master
     - name: Terraform init
       uses: hashicorp/terraform-github-actions@master
       with:
@@ -32,3 +34,4 @@ jobs:
         echo aws s3 ls $S3_BUCKET
         aws s3 ls $S3_BUCKET
         terraform workspace list
+        ls -lr

@@ -20,10 +20,10 @@ jobs:
       with:
         tf_actions_version: 0.12.20
         tf_actions_subcommand: 'init'
-        args: -input=false -backend-config=bucket=rba-tfstate-${{ steps.aws-config.outputs.aws-account-id }}
+        args: -input=false -backend-config=bucket=rba-tf-state-${{ steps.aws-config.outputs.aws-account-id }}
     - name: Print info
       env:
-        S3_BUCKET: rba-tfstate-${{ steps.aws-config.outputs.aws-account-id }}
+        S3_BUCKET: rba-tf-state-${{ steps.aws-config.outputs.aws-account-id }}
         S3_KEY: "env:/${{github.event.ref}}/disco"
       run: |
         echo I was called because ${{github.event.ref_type}} ${{github.event.ref}} was ${{github.action}}...

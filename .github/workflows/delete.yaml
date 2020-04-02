@@ -1,11 +1,12 @@
-name: TestDelete
+name: TerraformDestroyAfterDeletedFeatureBranch
 on:
   delete:
     branches:
-    - 'test-rba-*'
+    - 'test-rba-disc-*'
+    - 'TEST-RBA-DISC-*'
 jobs:
-  my_first_job:
-    name: My First Job on Delete
+  Run_Terraform_Destroy_After_Deleted_Feature_Branch:
+    name: Terraform destroy on deleted branch
     runs-on: ubuntu-18.04
     steps:
     - name: Configure AWS Credentials
@@ -15,23 +16,26 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
-    - name: 'Checkout default branch (to have tf files)'
+    - name: Checkout branch (to have tf files)
       uses: actions/checkout@v2
       with:
-        ref: master
+        ref: ${{github.event.ref}}
     - name: Terraform init
       uses: hashicorp/terraform-github-actions@master
       with:
         tf_actions_version: 0.12.20
         tf_actions_subcommand: 'init'
-        args: -input=false -backend-config=bucket=rba-tf-state-${{ steps.aws-config.outputs.aws-account-id }}
+        args: -input=false -backend-config=bucket=tf-state-${{ steps.aws-config.outputs.aws-account-id }} -backend-config=key=${{github.event.repository.name}}/terraform.tfstate -backend-config=region=${{secrets.AWS_DEFAULT_REGION}} deploy/terraform
+        # CIRCLE_PROJECT_REPONAME=disco = ${{github.event.repository.name}} GITHUB_REPOSITORY
+        # terraform init -backend-config=bucket=tf-state-${{ steps.aws-config.outputs.aws-account-id }} -backend-config=key=${{github.event.repository.name}}/terraform.tfstate deploy/terraform
+        TF_WORKSPACE: ${{github.event.ref}}
     - name: Print info
       env:
         S3_BUCKET: rba-tf-state-${{ steps.aws-config.outputs.aws-account-id }}
-        S3_KEY: "env:/${{github.event.ref}}/disco"
+        S3_KEY: "env:/${{github.event.ref}}/disco/terraform.tfstate"
+        RBA_NAME: ${{ secrets.TEST_JSON.name }}
       run: |
         echo I was called because ${{github.event.ref_type}} ${{github.event.ref}} was ${{github.action}}...
-        echo aws s3 ls $S3_BUCKET
         aws s3 ls $S3_BUCKET
-        terraform workspace list
-        ls -lr
+        terraform workspace list deploy/terraform
+        terraform workspace select ${{github.event.ref}} deploy/terraform && terraform plan -destroy deploy/terraform

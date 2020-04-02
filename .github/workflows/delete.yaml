@@ -2,8 +2,8 @@ name: TerraformDestroyAfterDeletedFeatureBranch
 on:
   delete:
     branches:
-    - 'test-rba-disc-*'
-    - 'TEST-RBA-DISC-*'
+    - 'test-rba-*'
+    - 'TEST-RBA-*'
 jobs:
   Run_Terraform_Destroy_After_Deleted_Feature_Branch:
     name: Terraform destroy on deleted branch

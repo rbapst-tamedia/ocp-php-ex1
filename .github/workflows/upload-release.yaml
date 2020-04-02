@@ -11,6 +11,5 @@ jobs:
     - name: Display secrets
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        RBA_NAME: ${{ secrets.TEST_JSON }}
       run: |
-        grep -i this $RBA_NAME && echo ok
+        echo ok

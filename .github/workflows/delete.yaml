@@ -33,8 +33,6 @@ jobs:
         # CIRCLE_PROJECT_REPONAME = disco = ${{github.event.repository.name}}
         TF_WORKSPACE: ${{github.event.ref}}
     - name: Print info
-      env:
-        # S3_BUCKET: rba-tf-state-${{ steps.aws-config.outputs.aws-account-id }}
       run: |
         echo I was called because ${{github.event.ref_type}} ${{github.event.ref}} was ${{github.event_name}}...
         aws s3 ls tf-state-${{ steps.aws-config.outputs.aws-account-id }}

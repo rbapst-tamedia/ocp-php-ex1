@@ -16,10 +16,11 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
-    - name: Checkout branch (to have tf files)
+    - name: Checkout default (master) branch (to have tf files)
+      # We take the master branche because it's impossible to checkout the deleted branch.
       uses: actions/checkout@v2
       with:
-        ref: ${{github.event.ref}}
+        ref: master
     - name: Terraform init
       uses: hashicorp/terraform-github-actions@master
       with:

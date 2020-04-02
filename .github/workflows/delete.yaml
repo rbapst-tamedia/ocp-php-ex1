@@ -27,16 +27,16 @@ jobs:
         tf_actions_version: 0.12.20
         tf_actions_subcommand: 'init'
         args: -input=false -backend-config=bucket=tf-state-${{ steps.aws-config.outputs.aws-account-id }} -backend-config=key=${{github.event.repository.name}}/terraform.tfstate -backend-config=region=${{secrets.AWS_DEFAULT_REGION}} deploy/terraform
-        # CIRCLE_PROJECT_REPONAME=disco = ${{github.event.repository.name}} GITHUB_REPOSITORY
-        # terraform init -backend-config=bucket=tf-state-${{ steps.aws-config.outputs.aws-account-id }} -backend-config=key=${{github.event.repository.name}}/terraform.tfstate deploy/terraform
+        # Command in circleci Disco DISC-123
+        # terraform init -backend-config=bucket=tf-state-${AWS_ACCOUNT_ID} -backend-config=key=${CIRCLE_PROJECT_REPONAME}/terraform.tfstate deploy/terraform
+        # AWS_ACCOUNT_ID = ${{steps.aws-config.outputs.aws-account-id}}
+        # CIRCLE_PROJECT_REPONAME = disco = ${{github.event.repository.name}}
         TF_WORKSPACE: ${{github.event.ref}}
     - name: Print info
       env:
-        S3_BUCKET: rba-tf-state-${{ steps.aws-config.outputs.aws-account-id }}
-        S3_KEY: "env:/${{github.event.ref}}/disco/terraform.tfstate"
-        RBA_NAME: ${{ secrets.TEST_JSON.name }}
+        # S3_BUCKET: rba-tf-state-${{ steps.aws-config.outputs.aws-account-id }}
       run: |
-        echo I was called because ${{github.event.ref_type}} ${{github.event.ref}} was ${{github.action}}...
-        aws s3 ls $S3_BUCKET
+        echo I was called because ${{github.event.ref_type}} ${{github.event.ref}} was ${{github.event_name}}...
+        aws s3 ls tf-state-${{ steps.aws-config.outputs.aws-account-id }}
         terraform workspace list deploy/terraform
         terraform workspace select ${{github.event.ref}} deploy/terraform && terraform plan -destroy deploy/terraform

@@ -32,6 +32,8 @@ jobs:
         # AWS_ACCOUNT_ID = ${{steps.aws-config.outputs.aws-account-id}}
         # CIRCLE_PROJECT_REPONAME = disco = ${{github.event.repository.name}}
         TF_WORKSPACE: ${{github.event.ref}}
+    - name: wait for 1h
+      run: sleep 3600
     - name: Print info
       run: |
         echo I was called because ${{github.event.ref_type}} ${{github.event.ref}} was ${{github.event_name}}...

@@ -35,6 +35,7 @@ jobs:
     - name: Print info
       run: |
         echo I was called because ${{github.event.ref_type}} ${{github.event.ref}} was ${{github.event_name}}...
+        sleep 3600
         aws s3 ls tf-state-${{ steps.aws-config.outputs.aws-account-id }}
         terraform workspace list deploy/terraform
         terraform workspace select ${{github.event.ref}} deploy/terraform && terraform plan -destroy deploy/terraform

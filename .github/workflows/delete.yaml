@@ -44,7 +44,7 @@ jobs:
     - name: Terraform init
       uses: hashicorp/terraform-github-actions@master
       with:
-        tf_actions_version: $TERRAFORM_VERSION
+        tf_actions_version: ${{env.TERRAFORM_VERSION}}
         tf_actions_subcommand: 'init'
         args: -input=false -backend-config=bucket=tf-state-${{ steps.aws-config.outputs.aws-account-id }} -backend-config=key=${{github.event.repository.name}}/terraform.tfstate -backend-config=region=${{secrets.AWS_DEFAULT_REGION}} $TERRAFORM_DIR
         # Command in circleci Disco DISC-123

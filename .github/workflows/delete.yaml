@@ -40,7 +40,7 @@ jobs:
       # We take the master branche because it's impossible to checkout the deleted branch.
       uses: actions/checkout@v2
       with:
-        ref: $DEFAULT_BRANCH
+        ref: ${{env.DEFAULT_BRANCH}}
     - name: Terraform init
       uses: hashicorp/terraform-github-actions@master
       with:

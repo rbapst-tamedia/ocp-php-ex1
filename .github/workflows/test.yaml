@@ -1,0 +1,46 @@
+name: TerraformDestroyAfterDeletedFeatureBranch
+on:
+  push:
+    branches:
+    - 'test-rba-*'
+    - 'TEST-RBA-*'
+jobs:
+  Test_other_images:
+    name: Test some runs-on images...
+    runs-on: alpine
+    env:
+      # Terraform version to use
+      TERRAFORM_VERSION: 0.12.20
+      
+      # location on the terraform files in github repo
+      TERRAFORM_DIR: deploy/terraform
+
+      # Terraform vars file
+      TERRAFORM_VAR_FILE: app.tfvars
+     
+      # default branch of repo (used to fetch files 
+      DEFAULT_BRANCH: master
+
+      # other variables needed for terraform
+      # "destroy" command, value is not important...
+      TF_VAR_branch: ignored_for_destroy
+      TF_VAR_image_repo_prefix: ignored_for_destroy
+      TF_VAR_image_tag: ignored_for_destroy
+      TF_VAR_deployment_env: ignored_for_destroy
+      TF_VAR_disco_ssr_secret: ignored_for_destroy
+    steps:
+    - name: Print info
+      run: |
+        echo I was called because ${{github.event.ref_type}} ${{github.event.ref}} was ${{github.event_name}}...
+    - name: Configure AWS Credentials
+      id: aws-config
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+    - name: Checkout default (master) branch (to have tf files)
+      # We take the master branche because it's impossible to checkout the deleted branch.
+      uses: actions/checkout@v2
+      with:
+        ref: ${{env.DEFAULT_BRANCH}}

@@ -1,4 +1,4 @@
-name: TerraformDestroyAfterDeletedFeatureBranch
+name: TestRunsOnParameter
 on:
   push:
     branches:

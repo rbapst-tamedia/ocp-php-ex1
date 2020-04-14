@@ -12,15 +12,6 @@ jobs:
       # Terraform version to use
       TERRAFORM_VERSION: 0.12.20
       
-      # location on the terraform files in github repo
-      TERRAFORM_DIR: deploy/terraform
-
-      # Terraform vars file
-      TERRAFORM_VAR_FILE: app.tfvars
-     
-      # default branch of repo (used to fetch files 
-      DEFAULT_BRANCH: master
-
       # other variables needed for terraform
       # "destroy" command, value is not important...
       TF_VAR_branch: ignored_for_destroy

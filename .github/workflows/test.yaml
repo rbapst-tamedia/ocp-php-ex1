@@ -7,7 +7,7 @@ on:
 jobs:
   Test_other_images:
     name: Test some runs-on images...
-    runs-on: ubuntu
+    runs-on: ubuntu-latest
     timeout-minutes: 5
     env:
       # Terraform version to use

@@ -8,6 +8,7 @@ jobs:
   Test_other_images:
     name: Test some runs-on images...
     runs-on: alpine
+    timeout-minutes: 5
     env:
       # Terraform version to use
       TERRAFORM_VERSION: 0.12.20
